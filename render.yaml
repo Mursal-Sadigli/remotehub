@@ -1,10 +1,11 @@
 services:
-  - type: worker
+  - type: web
     name: remotehub-bot
     runtime: docker
-    plan: starter
+    plan: free
     region: frankfurt
     dockerfilePath: ./Dockerfile
+    healthCheckPath: /
     autoDeployTrigger: commit
     envVars:
       - key: TELEGRAM_BOT_TOKEN

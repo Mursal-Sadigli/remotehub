@@ -1,8 +1,11 @@
 import json
 import os
-import requests
+import threading
 import time
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+
+import requests
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
@@ -19,6 +22,25 @@ def ensure_drive_token() -> None:
         return
     json.loads(raw)
     Path("token.json").write_text(raw, encoding="utf-8")
+
+
+def start_health_server() -> None:
+    """Render Web Service $PORT-u dinləməlidir, yoxsa instans düşür."""
+
+    class HealthHandler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(200)
+            self.send_header("Content-Type", "text/plain; charset=utf-8")
+            self.end_headers()
+            self.wfile.write(b"ok")
+
+        def log_message(self, format, *args):
+            return
+
+    port = int(os.environ.get("PORT", "10000"))
+    server = ThreadingHTTPServer(("0.0.0.0", port), HealthHandler)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    print(f"[+] Health server 0.0.0.0:{port}")
 
 
 ensure_drive_token()
@@ -156,4 +178,5 @@ if __name__ == "__main__":
     app.post_init = post_init
 
     print("[+] Master Bot (Bulud) ise dushdu...")
+    start_health_server()
     app.run_polling()

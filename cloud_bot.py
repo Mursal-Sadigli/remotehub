@@ -1,6 +1,8 @@
+import json
 import os
 import requests
 import time
+from pathlib import Path
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
@@ -9,8 +11,26 @@ from commands import drive
 
 load_dotenv()
 
+
+def ensure_drive_token() -> None:
+    """Render-də token.json git-ə düşməsin deyə env-dən yazırıq."""
+    raw = os.environ.get("GOOGLE_TOKEN_JSON", "").strip()
+    if not raw:
+        return
+    json.loads(raw)
+    Path("token.json").write_text(raw, encoding="utf-8")
+
+
+ensure_drive_token()
+
 TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+if not TOKEN:
+    raise ValueError("TELEGRAM_BOT_TOKEN is missing. Set it in Render Environment.")
+
 FIREBASE_URL = os.environ.get("FIREBASE_URL", "").rstrip("/")
+if not FIREBASE_URL:
+    raise ValueError("FIREBASE_URL is missing. Set it in Render Environment.")
+
 ALLOWED_USER_ID = 6426820534
 
 def authorized(update: Update) -> bool:

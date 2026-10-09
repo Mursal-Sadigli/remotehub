@@ -1,0 +1,15 @@
+services:
+  - type: worker
+    name: remotehub-bot
+    runtime: docker
+    plan: starter
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    autoDeployTrigger: commit
+    envVars:
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: FIREBASE_URL
+        sync: false
+      - key: GOOGLE_TOKEN_JSON
+        sync: false

@@ -1,0 +1,14 @@
+.venv
+.git
+__pycache__
+*.pyc
+.env
+credentials.json
+token.json
+pc_agent.py
+bot.py
+*.vbs
+*.js
+drive_test.py
+stress_module.py
+commands/power.py

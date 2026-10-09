@@ -20,11 +20,12 @@ from stress_module import get_stress_handlers
 from commands import power, drive
 
 
-# ============================================================
-# CONFIG
-# ============================================================
+from dotenv import load_dotenv
+load_dotenv()
 
-TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+if not TOKEN:
+    raise ValueError("TELEGRAM_BOT_TOKEN is missing! Please add it to the .env file.")
 
 ALLOWED_USER_ID = 6426820534
 

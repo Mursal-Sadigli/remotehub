@@ -14,5 +14,9 @@ services:
         sync: false
       - key: INFRA_SERVICES_JSON
         sync: false
+      - key: RENDER_API_KEY
+        sync: false
+      - key: VERCEL_TOKEN
+        sync: false
       - key: GOOGLE_TOKEN_JSON
         sync: false
